@@ -6,72 +6,95 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #000000; /* Black background */
-        color: #ffffff;      /* White text */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        background: #0b0c10; /* Dark background */
+        color: #ffffff;
         margin: 0;
+        padding: 0;
     }
 
     .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
         text-align: center;
-        padding: 20px 30px;
     }
 
     .title {
-        font-size: 28px;
+        font-size: 36px;
         font-weight: bold;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+
+    .subtitle {
+        font-size: 20px;
+        margin-bottom: 30px;
+        color: #b5b5b5;
     }
 
     .links-box {
         display: flex;
-        gap: 60px;
-        margin-top: 10px;
-        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
     }
 
     .link-section {
-        text-align: center;
+        background: #1f2833;
+        border-radius: 12px;
+        padding: 20px;
+        width: 260px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .link-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
 
     .link-title {
         font-size: 18px;
-        margin-bottom: 5px;
-    }
-
-    .blue {
-        color: #5865F2; /* Discord blue */
-    }
-
-    .inviteLink {
-        font-size: 18px;
-        color: #ffffff;
+        font-weight: bold;
+        color: #5865F2;
         margin-bottom: 10px;
     }
 
+    .inviteLink {
+        font-size: 16px;
+        color: #ffffff;
+        word-break: break-all;
+        margin-bottom: 15px;
+    }
+
     button {
-        padding: 8px 18px;
+        padding: 10px 20px;
         border: none;
-        background: #ffffff;
-        color: #000000;
+        background: #5865F2;
+        color: #ffffff;
         font-size: 15px;
-        border-radius: 5px;
+        border-radius: 6px;
         cursor: pointer;
-        transition: background 0.3s ease, color 0.3s ease;
+        transition: background 0.3s ease, transform 0.2s ease;
     }
 
     button:hover {
-        background: #5865F2; /* Discord blue hover */
-        color: #ffffff;
+        background: #4752c4;
+        transform: scale(1.05);
     }
 
     .signature {
-        margin-top: 30px;
+        margin-top: 50px;
         font-size: 16px;
+        color: #888888;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+        .links-box {
+            flex-direction: column;
+            gap: 20px;
+        }
     }
 </style>
 </head>
@@ -80,23 +103,22 @@
 <div class="container">
 
     <!-- TOP TITLE -->
-    <p class="title">Discord</p>
-
-    <h2>Join our Discord Servers</h2>
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
 
     <!-- LINKS SIDE BY SIDE -->
     <div class="links-box">
 
         <!-- FIRST SERVER -->
         <div class="link-section">
-            <p class="link-title blue">Glade by Chill Hub serv.</p>
+            <p class="link-title">Glade by Chill Hub</p>
             <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
             <button onclick="copyLink('invite1')">Copy Link</button>
         </div>
 
         <!-- SECOND SERVER -->
         <div class="link-section">
-            <p class="link-title blue">Chill Hub server</p>
+            <p class="link-title">Chill Hub server</p>
             <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
             <button onclick="copyLink('invite2')">Copy Link</button>
         </div>
@@ -117,4 +139,3 @@ function copyLink(id) {
 
 </body>
 </html>
-
