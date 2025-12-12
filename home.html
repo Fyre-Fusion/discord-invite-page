@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* === GLOBAL STYLES === */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #ffffff;
+    position: relative;
+    transition: background 0.5s, color 0.5s;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    animation: fadeInDown 1s forwards;
+}
+
+.subtitle {
+    font-size: 20px;
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeInDown 1.5s forwards;
+}
+
+@keyframes fadeInDown {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+}
+
+/* === SERVER CARD ROWS === */
+.server-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+    perspective: 1000px;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* === CARD / LINK SECTION === */
+.link-section {
+    background: #1f1f1f;
+    border-radius: 12px;
+    padding: 25px;
+    width: 280px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+.link-section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* Card tilt animation removed on hover since dynamic tilt is now used */
+
+/* === CARD CONTENT === */
+.link-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    font-size: 16px;
+    color: #ffffff;
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.description {
+    flex: 1;
+    color: #b5b5b5;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* === COPY BUTTON === */
+.copy-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #6a0dad;
+    color: #ffffff;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-btn:hover,
+.copy-btn:active,
+.copy-btn:focus {
+    background: #4b0082;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(107,0,168,0.6);
+}
+
+/* Ripple Effect */
+.copy-btn::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.3);
+    display: block;
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s, opacity 1s;
+}
+
+.copy-btn:active::after {
+    transform: scale(3);
+    opacity: 1;
+    transition: 0s;
+}
+
+/* === SIGNATURE === */
+.signature {
+    margin-top: 60px;
+    font-size: 16px;
+    text-align: center;
+    color: #888888;
+}
+
+/* === TOAST === */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* === DARK/LIGHT MODE === */
+body.light-mode {
+    background: #f2f2f2;
+    color: #1f1f1f;
+}
+body.light-mode .link-section {
+    background: #ffffff;
+}
+body.light-mode .copy-btn {
+    background: #6a0dad;
+    color: #fff;
+}
+
+/* Mode toggle button */
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #5865F2;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+.mode-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+}
+.mode-toggle:hover {
+    transform: scale(1.1);
+    background: #9B59B6;
+}
+
+/* === CANVASES === */
+#particle-canvas, #confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+#confetti-canvas { z-index: 2; }
+
+/* === MOBILE === */
+@media (max-width: 768px) {
+    .server-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .link-section {
+        width: 100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+
+<!-- DARK/LIGHT MODE BUTTON -->
+<button class="mode-toggle" id="darkModeToggle">
+    <svg id="modeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>
+</button>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <!-- SERVER 1 -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
+        </div>
+        <div class="description">
+            A community for room booking, organized channels, and a friendly staff.
+        </div>
+    </div>
+
+    <!-- SERVER 2 -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
+        </div>
+        <div class="description">
+            Hangout, chill, and chat with an active community.
+        </div>
+    </div>
+
+    <!-- SERVER 3 -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
+        </div>
+        <div class="description">
+            Roblox-focused server with fast J4J channels.
+        </div>
+    </div>
+
+    <!-- SERVER 4 -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
+        </div>
+        <div class="description">
+            Abyss is a place to hang out, chat, and play with Bob the bot.
+        </div>
+    </div>
+
+    <!-- SERVER 5 -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
+        </div>
+        <div class="description">
+            Welcome to the ultimate chill Roblox hangout! Fun gaming sessions, Greenville RP, daily vibes, friendly community, events, giveaways, and unforgettable memories — join us and be part of the adventure!
+        </div>
+    </div>
+
+    <p class="signature">by (username) - O̷̷v̷̷E̷̷r̷̷l̷̷0@d̷̷x̷̷10o̷̷</p>
+</div>
+
+<script>
+/* === TOAST FUNCTION === */
+function showToast(message){
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(()=>toast.remove(), 300);
+    }, 2000);
+}
+
+/* === COPY LINK + CONFETTI === */
+function copyLink(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        runConfetti();
+        showToast("Link copied!");
+    });
+}
+
+/* === SCROLL ANIMATION === */
+const rows = document.querySelectorAll('.server-row');
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
+}, {threshold: 0.2});
+rows.forEach(row => observer.observe(row));
+
+/* === DYNAMIC 3D CARD TILT === */
+document.querySelectorAll('.link-section').forEach(card => {
+    card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width/2;
+        const centerY = rect.height/2;
+        const rotateX = ((y - centerY)/centerY)*6; // tilt down/up
+        const rotateY = ((x - centerX)/centerX)*6; // tilt left/right
+        card.style.transform = `translateY(-12px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0px) rotateX(0deg) rotateY(0deg)';
+    });
+});
+
+/* === PARTICLES BACKGROUND === */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+let particles = [];
+class Particle {
+    constructor(){ this.reset(); }
+    reset(){
+        this.x = Math.random()*canvas.width;
+        this.y = Math.random()*canvas.height;
+        this.size = Math.random()*3+2;
+        this.speedX = (Math.random()-0.5)*0.3;
+        this.speedY = (Math.random()-0.5)*0.3;
+        this.alpha = Math.random()*0.6+0.1;
+    }
+    update(mouse){
+        this.x += this.speedX + (mouse ? (this.x-mouse.x)*-0.0005 : 0);
+        this.y += this.speedY + (mouse ? (this.y-mouse.y)*-0.0005 : 0);
+        if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height){ this.reset(); }
+    }
+    draw(){
+        ctx.fillStyle = `rgba(88,101,242,${this.alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fill();
+    }
+}
+for(let i=0;i<80;i++){ particles.push(new Particle()); }
+
+let mouse=null;
+canvas.addEventListener('mousemove',e=>mouse={x:e.clientX,y:e.clientY});
+canvas.addEventListener('mouseleave',()=>mouse=null);
+canvas.addEventListener('touchmove',e=>{
+    const t=e.touches[0];
+    mouse={x:t.clientX,y:t.clientY};
+});
+canvas.addEventListener('touchend',()=>mouse=null);
+
+function animateParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{ p.update(mouse); p.draw(); });
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+/* === CONFETTI === */
+const confettiCanvas = document.getElementById('confetti-canvas');
+const confettiCtx = confettiCanvas.getContext('2d');
+confettiCanvas.width = innerWidth;
+confettiCanvas.height = innerHeight;
+let confettis = [];
+
+function runConfetti(){
+    setTimeout(()=>{
+        for(let i=0;i<100;i++){
+            confettis.push({
+                x: confettiCanvas.width/2,
+                y: 0,
+                color: `hsl(${Math.random()*360},100%,50%)`,
+                size: Math.random()*6+4,
+                speedY: Math.random()*2+2,
+                speedX: (Math.random()-0.5)*4,
+                rotation: Math.random()*360,
+                rotationSpeed: (Math.random()-0.5)*10
+            });
+        }
+        animateConfetti();
+    }, 120);
+}
+
+function animateConfetti(){
+    confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    for(let i=0;i<confettis.length;i++){
+        const c = confettis[i];
+        c.x += c.speedX;
+        c.y += c.speedY;
+        c.rotation += c.rotationSpeed;
+        confettiCtx.save();
+        confettiCtx.translate(c.x,c.y);
+        confettiCtx.rotate(c.rotation*Math.PI/180);
+        confettiCtx.fillStyle = c.color;
+        confettiCtx.fillRect(-c.size/2,-c.size/2,c.size,c.size);
+        confettiCtx.restore();
+    }
+    confettis = confettis.filter(c=>c.y<confettiCanvas.height+20);
+    if(confettis.length>0) requestAnimationFrame(animateConfetti);
+}
+
+/* === RESIZE HANDLER === */
+onresize = ()=>{
+    canvas.width = confettiCanvas.width = innerWidth;
+    canvas.height = confettiCanvas.height = innerHeight;
+};
+
+/* === DARK/LIGHT MODE TOGGLE === */
+const darkToggle = document.getElementById('darkModeToggle');
+const modeIcon = document.getElementById('modeIcon');
+darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    if(document.body.classList.contains('light-mode')){
+        modeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/>'; // sun
+        modeIcon.setAttribute('fill', '#FFD700');
+    } else {
+        modeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/>'; // moon style
+        modeIcon.setAttribute('fill', '#fff');
+    }
+});
+</script>
+</body>
+</html>
+
