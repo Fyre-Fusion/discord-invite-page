@@ -2,357 +2,1103 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Fyre Fusion Login & Discord Invites</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>Discord Invite Links</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* ===== GLOBAL ===== */
+/* === GLOBAL STYLES === */
 body {
-  font-family: 'Roboto', sans-serif;
-  margin:0;
-  padding:0;
-  background: linear-gradient(135deg, #000000, #0a0f20);
-  color:#fff;
-  overflow-x:hidden;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #ffffff;
+    position: relative;
+    transition: background 0.5s, color 0.5s;
 }
 
-/* ===== LOGIN CARD ===== */
-.login-container {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  z-index:1;
-  position:relative;
-}
-.login-card {
-  background: linear-gradient(145deg, #0d0d0d, #0a0f20);
-  border-radius:15px;
-  padding:40px;
-  width:350px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 0 20px rgba(255,0,0,0.3);
-}
-.login-card::before {
-  content:'';
-  position:absolute;
-  top:-50%; left:-50%;
-  width:200%; height:200%;
-  background: linear-gradient(45deg, #8B0000, #ff0000, #8B0000);
-  animation: streak 3s linear infinite;
-  z-index:0;
-}
-@keyframes streak{
-  0%{transform:rotate(0deg);}
-  50%{transform:rotate(180deg);}
-  100%{transform:rotate(360deg);}
-}
-.login-card * {position:relative; z-index:1;}
-.login-card h2{text-align:center;margin-bottom:30px;}
-
-.input-group{position:relative;margin-bottom:25px;}
-.input-group input{
-  width:100%;
-  padding:12px 40px 12px 12px;
-  border-radius:8px;
-  border:none;
-  background:#111;
-  color:#fff;
-  font-size:16px;
-}
-.input-group input::placeholder{color:#777;}
-.input-group .toggle-pass{
-  position:absolute;
-  top:50%; right:10px;
-  transform:translateY(-50%);
-  cursor:pointer;
-  color:#888;
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
 }
 
-.login-btn{
-  width:100%;
-  padding:12px;
-  background:#8B0000;
-  border:none;
-  border-radius:8px;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
-  transition: transform 0.2s;
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
 }
-.login-btn:hover{transform:scale(1.05);}
-#forgotPass{margin-top:15px;text-align:center;cursor:pointer;color:#ff5555;}
 
-/* ===== INVITE PAGE ===== */
-#invitePage{display:none;padding:60px 20px;max-width:1000px;margin:0 auto;}
-.title{font-size:42px;font-weight:bold;text-align:center;margin-bottom:10px;}
-.subtitle{font-size:20px;text-align:center;color:#b5b5b5;margin-bottom:40px;}
+.title {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    animation: fadeInDown 1s forwards;
+}
+
+.subtitle {
+    font-size: 20px;
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInDown 1.5s forwards;
+}
+
+@keyframes fadeInDown {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+}
+
+/* SEARCH BAR */
 #searchBar{
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  margin-bottom:30px;
-  font-size:16px;
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:30px;
+    font-size:16px;
 }
 
-/* SERVER CARD */
-.server-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:20px;
-  margin-bottom:30px;
+/* SERVER CARD ROWS */
+.server-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+    perspective: 1000px;
 }
-.link-section{
-  background:#1f1f1f;
-  border-radius:12px;
-  padding:25px;
-  width:280px;
-  position:relative;
-  border:3px solid transparent;
-  background-clip:padding-box;
-  transition:transform 0.2s ease;
-  cursor:pointer;
-}
-.link-section::before{
-  content:'';
-  position:absolute;
-  top:-3px; left:-3px; right:-3px; bottom:-3px;
-  border-radius:15px;
-  background:linear-gradient(270deg,#8B0000,#ff0000);
-  z-index:-1;
-  animation:borderGradient 4s linear infinite;
-}
-@keyframes borderGradient{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
-}
-.link-title{font-size:18px;font-weight:bold;margin-bottom:10px;}
-.inviteLink{font-size:16px;color:#fff;word-break:break-all;margin-bottom:15px;}
-.copy-btn{
-  padding:10px 20px;
-  border:none;
-  background:#8B0000;
-  color:#fff;
-  font-size:15px;
-  border-radius:6px;
-  cursor:pointer;
-  position:relative;
-  overflow:hidden;
-}
-.copy-btn:hover{background:#ff0000;transform:scale(1.05);}
 
-/* Toast */
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:#8B0000;
-  color:#fff;
-  padding:10px 20px;
-  border-radius:6px;
-  z-index:9999;
-  opacity:0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* Confetti canvas */
+/* CARD / LINK SECTION */
+.link-section {
+    background: #1f1f1f;
+    border-radius: 12px;
+    padding: 25px;
+    width: 280px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+.link-section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* Hover darker purple */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+/* CARD CONTENT */
+.link-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    font-size: 16px;
+    color: #ffffff;
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.description {
+    flex: 1;
+    color: #b5b5b5;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* COPY BUTTON */
+.copy-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #6a0dad;
+    color: #ffffff;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(107,0,168,0.6);
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* CONFETTI */
 #confetti-canvas{
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:2;
 }
 
-/* Tilt effect */
-.link-section.tilt{transform:perspective(1000px) rotateX(0deg) rotateY(0deg);}
-@media(max-width:768px){.server-row{flex-direction:column;align-items:flex-start;}.link-section{width:100%;}}
-
-#logoutBtn{
-  margin:20px auto; display:block; padding:10px 20px; background:#8B0000; border:none; border-radius:8px; color:#fff; cursor:pointer;
+/* MOBILE */
+@media(max-width:768px){
+    .server-row{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .link-section{
+        width:100%;
+    }
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-container">
-  <div class="login-card">
-    <h2>Login</h2>
-    <div class="input-group">
-      <input type="text" id="username" placeholder="Username">
-    </div>
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Password">
-      <i class="fas fa-eye toggle-pass" id="togglePass"></i>
-    </div>
-    <button class="login-btn" id="loginBtn">Login</button>
-    <p id="forgotPass">Forgot Password?</p>
-  </div>
-</div>
-
-<!-- INVITE PAGE -->
-<div id="invitePage">
-  <p class="title">Fyre Fusion Discord</p>
-  <p class="subtitle">Join our communities and connect with like-minded people!</p>
-  <input type="text" id="searchBar" placeholder="Search servers...">
-  <div class="server-row" id="serversContainer">
-    <div class="link-section tilt">
-      <p class="link-title">Glade by Chill Hub</p>
-      <p class="inviteLink">https://discord.gg/8aPtykpU</p>
-      <button class="copy-btn">Copy Link</button>
-    </div>
-    <div class="link-section tilt">
-      <p class="link-title">Chill Hub Server</p>
-      <p class="inviteLink">https://discord.gg/VjK2BKpT</p>
-      <button class="copy-btn">Copy Link</button>
-    </div>
-    <div class="link-section tilt">
-      <p class="link-title">J4J Roblox Paradise</p>
-      <p class="inviteLink">https://discord.gg/QFCgnnSRXA</p>
-      <button class="copy-btn">Copy Link</button>
-    </div>
-    <div class="link-section tilt">
-      <p class="link-title">Abyss Server</p>
-      <p class="inviteLink">https://discord.gg/EUSUAnEU</p>
-      <button class="copy-btn">Copy Link</button>
-    </div>
-    <div class="link-section tilt">
-      <p class="link-title">Pixelated Greenville Roleplay</p>
-      <p class="inviteLink">https://discord.gg/SdewTbCj78</p>
-      <button class="copy-btn">Copy Link</button>
-    </div>
-  </div>
-  <button id="logoutBtn">Logout</button>
-</div>
-
 <canvas id="confetti-canvas"></canvas>
 
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input type="text" id="searchBar" placeholder="Search servers...">
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
+        </div>
+        <div class="description">
+            A community for room booking, organized channels, and a friendly staff.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
+        </div>
+        <div class="description">
+            Hangout, chill, and chat with an active community.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
+        </div>
+        <div class="description">
+            Roblox-focused server with fast J4J channels.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
+        </div>
+        <div class="description">
+            Abyss is a place to hang out, chat, and play with Bob the bot.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
+        </div>
+        <div class="description">
+            Welcome to the ultimate chill Roblox hangout! Fun gaming sessions, Greenville RP, daily vibes, friendly community, events, giveaways, and unforgettable memories — join us and be part of the adventure!
+        </div>
+    </div>
+</div>
+
 <script>
-// PASSWORD TOGGLE
-const togglePass=document.getElementById('togglePass');
-const passwordInput=document.getElementById('password');
-togglePass.addEventListener('click',()=>{passwordInput.type=passwordInput.type==='password'?'text':'password';});
+/* === TOAST FUNCTION === */
+function showToast(message){
+    const toast=document.createElement('div');
+    toast.className='toast';
+    toast.innerText=message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(()=>toast.classList.add('show'));
+    setTimeout(()=>{toast.classList.remove('show'); setTimeout(()=>toast.remove(),300);},2000);
+}
 
-// CHECK LOGIN STATE ON LOAD
-window.addEventListener('DOMContentLoaded',()=>{
-  if(localStorage.getItem('loggedIn')==='true'){
-    document.querySelector('.login-container').style.display='none';
-    document.getElementById('invitePage').style.display='block';
-  }
-});
-
-// LOGIN
-document.getElementById('loginBtn').addEventListener('click',()=>{
-  const u=document.getElementById('username').value;
-  const p=document.getElementById('password').value;
-  if(u==='test'&&p==='1234'){
-    localStorage.setItem('loggedIn','true');
-    document.querySelector('.login-container').style.display='none';
-    document.getElementById('invitePage').style.display='block';
-  }else{alert('Invalid credentials');}
-});
-
-// LOGOUT
-document.getElementById('logoutBtn').addEventListener('click',()=>{
-  localStorage.removeItem('loggedIn');
-  location.reload();
-});
-
-// FORGOT PASSWORD MOCK
-document.getElementById('forgotPass').addEventListener('click',()=>{
-  const user=prompt("Enter your username to recover password:");
-  if(user){alert(`Pretending to send recovery email for user "${user}"`);}
-});
-
-// COPY LINKS + CONFETTI
-const confettiCanvas=document.getElementById('confetti-canvas');
-const ctx=confettiCanvas.getContext('2d');
-confettiCanvas.width=innerWidth; confettiCanvas.height=innerHeight;
-let confettis=[];
-function runConfetti(){
-  for(let i=0;i<100;i++){
-    confettis.push({
-      x:confettiCanvas.width/2,
-      y:0,
-      color:`hsl(${Math.random()*360},100%,50%)`,
-      size:Math.random()*6+4,
-      speedY:Math.random()*2+2,
-      speedX:(Math.random()-0.5)*4,
-      rotation:Math.random()*360,
-      rotationSpeed:(Math.random()-0.5)*10
+/* === COPY LINK + CONFETTI === */
+function copyLink(id){
+    const text=document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+        runConfetti();
+        showToast("Link copied!");
     });
-  }
-  animateConfetti();
 }
-function animateConfetti(){
-  ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-  for(let i=0;i<confettis.length;i++){
-    const c=confettis[i];
-    c.x+=c.speedX;c.y+=c.speedY;c.rotation+=c.rotationSpeed;
-    ctx.save();
-    ctx.translate(c.x,c.y);
-    ctx.rotate(c.rotation*Math.PI/180);
-    ctx.fillStyle=c.color;
-    ctx.fillRect(-c.size/2,-c.size/2,c.size,c.size);
-    ctx.restore();
-  }
-  confettis=confettis.filter(c=>c.y<confettiCanvas.height+20);
-  if(confettis.length>0) requestAnimationFrame(animateConfetti);
-}
-document.querySelectorAll('.copy-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const link=btn.previousElementSibling.innerText;
-    navigator.clipboard.writeText(link);
-    showToast("Link copied!");
-    runConfetti();
-  });
+
+/* === SCROLL ANIMATION === */
+const rows=document.querySelectorAll('.server-row');
+const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); });
+},{threshold:0.2});
+rows.forEach(row=>observer.observe(row));
+
+/* === DYNAMIC 3D CARD TILT === */
+document.querySelectorAll('.link-section').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+        const rect=card.getBoundingClientRect();
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
+        const centerX=rect.width/2;
+        const centerY=rect.height/2;
+        const rotateX=((y-centerY)/centerY)*6;
+        const rotateY=((x-centerX)/centerX)*6;
+        card.style.transform=`translateY(-12px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='translateY(0px) rotateX(0deg) rotateY(0deg)';});
 });
 
-// TOAST
-function showToast(msg){
-  const toast=document.createElement('div');
-  toast.className='toast';
-  toast.innerText=msg;
-  document.body.appendChild(toast);
-  requestAnimationFrame(()=>toast.classList.add('show'));
-  setTimeout(()=>{toast.classList.remove('show'); setTimeout(()=>toast.remove(),300);},2000);
-}
-
-// TILT
-document.querySelectorAll('.link-section.tilt').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const rect=card.getBoundingClientRect();
-    const x=e.clientX-rect.left;
-    const y=e.clientY-rect.top;
-    const centerX=rect.width/2;
-    const centerY=rect.height/2;
-    const rotateX=((y-centerY)/centerY)*6;
-    const rotateY=((x-centerX)/centerX)*6;
-    card.style.transform=`perspective(1000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-  });
-  card.addEventListener('mouseleave',()=>{card.style.transform='perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';});
-});
-
-// SEARCH
+/* === SEARCH === */
 const searchBar=document.getElementById('searchBar');
 searchBar.addEventListener('input',()=>{
-  const term=searchBar.value.toLowerCase();
-  document.querySelectorAll('.link-section').forEach(card=>{
-    const title=card.querySelector('.link-title').innerText.toLowerCase();
-    card.style.display=title.includes(term)?'block':'none';
-  });
+    const term=searchBar.value.toLowerCase();
+    document.querySelectorAll('.server-row').forEach(row=>{
+        const title=row.querySelector('.link-title').innerText.toLowerCase();
+        row.style.display=title.includes(term)?'flex':'none';
+    });
 });
 
-// RESIZE CONFETTI
+/* === CONFETTI === */
+const confettiCanvas=document.getElementById('confetti-canvas');
+const ctx=confettiCanvas.getContext('2d');
+confettiCanvas.width=innerWidth;
+confettiCanvas.height=innerHeight;
+let confettis=[];
+function runConfetti(){
+    for(let i=0;i<100;i++){
+        confettis.push({
+            x:confettiCanvas.width/2,
+            y:0,
+            color:`hsl(${Math.random()*360},100%,50%)`,
+            size:Math.random()*6+4,
+            speedY:Math.random()*2+2,
+            speedX:(Math.random()-0.5)*4,
+            rotation:Math.random()*360,
+            rotationSpeed:(Math.random()-0.5)*10
+        });
+    }
+    animateConfetti();
+}
+function animateConfetti(){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    for(let i=0;i<confettis.length;i++){
+        const c=confettis[i];
+        c.x+=c.speedX;c.y+=c.speedY;c.rotation+=c.rotationSpeed;
+        ctx.save();
+        ctx.translate(c.x,c.y);
+        ctx.rotate(c.rotation*Math.PI/180);
+        ctx.fillStyle=c.color;
+        ctx.fillRect(-c.size/2,-c.size/2,c.size,c.size);
+        ctx.restore();
+    }
+    confettis=confettis.filter(c=>c.y<confettiCanvas.height+20);
+    if(confettis.length>0) requestAnimationFrame(animateConfetti);
+}
+
+/* === RESIZE HANDLER === */
 window.addEventListener('resize',()=>{
-  confettiCanvas.width=innerWidth;
-  confettiCanvas.height=innerHeight;
+    confettiCanvas.width=confettiCanvas.width=innerWidth;
+    confettiCanvas.height=confettiCanvas.height=innerHeight;
 });
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+/* === GLOBAL STYLES === */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #ffffff;
+    position: relative;
+    transition: background 0.5s, color 0.5s;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    animation: fadeInDown 1s forwards;
+}
+
+.subtitle {
+    font-size: 20px;
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInDown 1.5s forwards;
+}
+
+@keyframes fadeInDown {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+}
+
+/* SEARCH BAR */
+#searchBar{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:30px;
+    font-size:16px;
+}
+
+/* SERVER CARD ROWS */
+.server-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+    perspective: 1000px;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD / LINK SECTION */
+.link-section {
+    background: #1f1f1f;
+    border-radius: 12px;
+    padding: 25px;
+    width: 280px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+.link-section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* Hover darker purple */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+/* CARD CONTENT */
+.link-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    font-size: 16px;
+    color: #ffffff;
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.description {
+    flex: 1;
+    color: #b5b5b5;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* COPY BUTTON */
+.copy-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #6a0dad;
+    color: #ffffff;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(107,0,168,0.6);
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* CONFETTI */
+#confetti-canvas{
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:2;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .server-row{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .link-section{
+        width:100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input type="text" id="searchBar" placeholder="Search servers...">
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
+        </div>
+        <div class="description">
+            A community for room booking, organized channels, and a friendly staff.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
+        </div>
+        <div class="description">
+            Hangout, chill, and chat with an active community.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
+        </div>
+        <div class="description">
+            Roblox-focused server with fast J4J channels.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
+        </div>
+        <div class="description">
+            Abyss is a place to hang out, chat, and play with Bob the bot.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
+        </div>
+        <div class="description">
+            Welcome to the ultimate chill Roblox hangout! Fun gaming sessions, Greenville RP, daily vibes, friendly community, events, giveaways, and unforgettable memories — join us and be part of the adventure!
+        </div>
+    </div>
+</div>
+
+<script>
+/* === TOAST FUNCTION === */
+function showToast(message){
+    const toast=document.createElement('div');
+    toast.className='toast';
+    toast.innerText=message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(()=>toast.classList.add('show'));
+    setTimeout(()=>{toast.classList.remove('show'); setTimeout(()=>toast.remove(),300);},2000);
+}
+
+/* === COPY LINK + CONFETTI === */
+function copyLink(id){
+    const text=document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+        runConfetti();
+        showToast("Link copied!");
+    });
+}
+
+/* === SCROLL ANIMATION === */
+const rows=document.querySelectorAll('.server-row');
+const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); });
+},{threshold:0.2});
+rows.forEach(row=>observer.observe(row));
+
+/* === DYNAMIC 3D CARD TILT === */
+document.querySelectorAll('.link-section').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+        const rect=card.getBoundingClientRect();
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
+        const centerX=rect.width/2;
+        const centerY=rect.height/2;
+        const rotateX=((y-centerY)/centerY)*6;
+        const rotateY=((x-centerX)/centerX)*6;
+        card.style.transform=`translateY(-12px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='translateY(0px) rotateX(0deg) rotateY(0deg)';});
+});
+
+/* === SEARCH === */
+const searchBar=document.getElementById('searchBar');
+searchBar.addEventListener('input',()=>{
+    const term=searchBar.value.toLowerCase();
+    document.querySelectorAll('.server-row').forEach(row=>{
+        const title=row.querySelector('.link-title').innerText.toLowerCase();
+        row.style.display=title.includes(term)?'flex':'none';
+    });
+});
+
+/* === CONFETTI === */
+const confettiCanvas=document.getElementById('confetti-canvas');
+const ctx=confettiCanvas.getContext('2d');
+confettiCanvas.width=innerWidth;
+confettiCanvas.height=innerHeight;
+let confettis=[];
+function runConfetti(){
+    for(let i=0;i<100;i++){
+        confettis.push({
+            x:confettiCanvas.width/2,
+            y:0,
+            color:`hsl(${Math.random()*360},100%,50%)`,
+            size:Math.random()*6+4,
+            speedY:Math.random()*2+2,
+            speedX:(Math.random()-0.5)*4,
+            rotation:Math.random()*360,
+            rotationSpeed:(Math.random()-0.5)*10
+        });
+    }
+    animateConfetti();
+}
+function animateConfetti(){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    for(let i=0;i<confettis.length;i++){
+        const c=confettis[i];
+        c.x+=c.speedX;c.y+=c.speedY;c.rotation+=c.rotationSpeed;
+        ctx.save();
+        ctx.translate(c.x,c.y);
+        ctx.rotate(c.rotation*Math.PI/180);
+        ctx.fillStyle=c.color;
+        ctx.fillRect(-c.size/2,-c.size/2,c.size,c.size);
+        ctx.restore();
+    }
+    confettis=confettis.filter(c=>c.y<confettiCanvas.height+20);
+    if(confettis.length>0) requestAnimationFrame(animateConfetti);
+}
+
+/* === RESIZE HANDLER === */
+window.addEventListener('resize',()=>{
+    confettiCanvas.width=confettiCanvas.width=innerWidth;
+    confettiCanvas.height=confettiCanvas.height=innerHeight;
+});
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* === GLOBAL STYLES === */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #ffffff;
+    position: relative;
+    transition: background 0.5s, color 0.5s;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    animation: fadeInDown 1s forwards;
+}
+
+.subtitle {
+    font-size: 20px;
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInDown 1.5s forwards;
+}
+
+@keyframes fadeInDown {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+}
+
+/* SEARCH BAR */
+#searchBar{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:30px;
+    font-size:16px;
+}
+
+/* SERVER CARD ROWS */
+.server-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+    perspective: 1000px;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD / LINK SECTION */
+.link-section {
+    background: #1f1f1f;
+    border-radius: 12px;
+    padding: 25px;
+    width: 280px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+.link-section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* Hover darker purple */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+/* CARD CONTENT */
+.link-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    font-size: 16px;
+    color: #ffffff;
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.description {
+    flex: 1;
+    color: #b5b5b5;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* COPY BUTTON */
+.copy-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #6a0dad;
+    color: #ffffff;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(107,0,168,0.6);
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* CONFETTI */
+#confetti-canvas{
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:2;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .server-row{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .link-section{
+        width:100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input type="text" id="searchBar" placeholder="Search servers...">
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
+        </div>
+        <div class="description">
+            A community for room booking, organized channels, and a friendly staff.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
+        </div>
+        <div class="description">
+            Hangout, chill, and chat with an active community.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
+        </div>
+        <div class="description">
+            Roblox-focused server with fast J4J channels.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
+        </div>
+        <div class="description">
+            Abyss is a place to hang out, chat, and play with Bob the bot.
+        </div>
+    </div>
+
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
+        </div>
+        <div class="description">
+            Welcome to the ultimate chill Roblox hangout! Fun gaming sessions, Greenville RP, daily vibes, friendly community, events, giveaways, and unforgettable memories — join us and be part of the adventure!
+        </div>
+    </div>
+</div>
+
+<script>
+/* === TOAST FUNCTION === */
+function showToast(message){
+    const toast=document.createElement('div');
+    toast.className='toast';
+    toast.innerText=message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(()=>toast.classList.add('show'));
+    setTimeout(()=>{toast.classList.remove('show'); setTimeout(()=>toast.remove(),300);},2000);
+}
+
+/* === COPY LINK + CONFETTI === */
+function copyLink(id){
+    const text=document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+        runConfetti();
+        showToast("Link copied!");
+    });
+}
+
+/* === SCROLL ANIMATION === */
+const rows=document.querySelectorAll('.server-row');
+const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); });
+},{threshold:0.2});
+rows.forEach(row=>observer.observe(row));
+
+/* === DYNAMIC 3D CARD TILT === */
+document.querySelectorAll('.link-section').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+        const rect=card.getBoundingClientRect();
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
+        const centerX=rect.width/2;
+        const centerY=rect.height/2;
+        const rotateX=((y-centerY)/centerY)*6;
+        const rotateY=((x-centerX)/centerX)*6;
+        card.style.transform=`translateY(-12px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='translateY(0px) rotateX(0deg) rotateY(0deg)';});
+});
+
+/* === SEARCH === */
+const searchBar=document.getElementById('searchBar');
+searchBar.addEventListener('input',()=>{
+    const term=searchBar.value.toLowerCase();
+    document.querySelectorAll('.server-row').forEach(row=>{
+        const title=row.querySelector('.link-title').innerText.toLowerCase();
+        row.style.display=title.includes(term)?'flex':'none';
+    });
+});
+
+/* === CONFETTI === */
+const confettiCanvas=document.getElementById('confetti-canvas');
+const ctx=confettiCanvas.getContext('2d');
+confettiCanvas.width=innerWidth;
+confettiCanvas.height=innerHeight;
+let confettis=[];
+function runConfetti(){
+    for(let i=0;i<100;i++){
+        confettis.push({
+            x:confettiCanvas.width/2,
+            y:0,
+            color:`hsl(${Math.random()*360},100%,50%)`,
+            size:Math.random()*6+4,
+            speedY:Math.random()*2+2,
+            speedX:(Math.random()-0.5)*4,
+            rotation:Math.random()*360,
+            rotationSpeed:(Math.random()-0.5)*10
+        });
+    }
+    animateConfetti();
+}
+function animateConfetti(){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    for(let i=0;i<confettis.length;i++){
+        const c=confettis[i];
+        c.x+=c.speedX;c.y+=c.speedY;c.rotation+=c.rotationSpeed;
+        ctx.save();
+        ctx.translate(c.x,c.y);
+        ctx.rotate(c.rotation*Math.PI/180);
+        ctx.fillStyle=c.color;
+        ctx.fillRect(-c.size/2,-c.size/2,c.size,c.size);
+        ctx.restore();
+    }
+    confettis=confettis.filter(c=>c.y<confettiCanvas.height+20);
+    if(confettis.length>0) requestAnimationFrame(animateConfetti);
+}
+
+/* === RESIZE HANDLER === */
+window.addEventListener('resize',()=>{
+    confettiCanvas.width=confettiCanvas.width=innerWidth;
+    confettiCanvas.height=confettiCanvas.height=innerHeight;
+});
+</script>
+</body>
+</html>
