@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Discord Invite Links</title>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -15,6 +14,7 @@ body {
     background-size: 400% 400%;
     animation: gradientBG 20s ease infinite;
     color: #ffffff;
+    overflow-x: hidden;
 }
 
 @keyframes gradientBG {
@@ -50,7 +50,7 @@ body {
     font-size: 16px;
 }
 
-/* ROW */
+/* SERVER ROWS */
 .server-row {
     display: flex;
     align-items: flex-start;
@@ -58,7 +58,7 @@ body {
     margin-bottom: 40px;
     opacity: 0;
     transform: translateY(30px);
-    transition: 0.6s ease;
+    transition: all 0.6s ease;
 }
 
 .server-row.show {
@@ -69,20 +69,23 @@ body {
 /* CARD */
 .link-section {
     width: 280px;
-    background: #1f1f1f;
+    background: #1f1f1f; /* original dark */
     padding: 25px;
     border-radius: 12px;
     position: relative;
     flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: background 0.6s ease, box-shadow 0.6s ease; /* slow and natural transition */
+    transition: background 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease; /* smooth hover */
+    cursor: pointer;
+    border: 3px solid transparent;
+    background-clip: padding-box;
 }
 
-/* GRADIENT OUTLINE */
+/* GRADIENT BORDER */
 .link-section::before {
     content: '';
     position: absolute;
-    inset: -3px;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
     border-radius: 15px;
     background: linear-gradient(270deg, #5865F2, #9B59B6);
     z-index: -1;
@@ -90,13 +93,14 @@ body {
 }
 
 @keyframes borderGradient {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
 }
 
+/* HOVER */
 .link-section:hover {
-    background: #2b1f3d;
+    background: #2b1f3d; /* vibrant purple */
     box-shadow: 0 6px 20px rgba(107,0,168,0.6);
 }
 
@@ -108,31 +112,37 @@ body {
 }
 
 .inviteLink {
+    font-size: 16px;
+    color: #ffffff;
     word-break: break-all;
     margin-bottom: 15px;
 }
 
-/* BUTTON */
+.description {
+    flex: 1;
+    color: #b5b5b5;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* COPY BUTTON */
 .copy-btn {
     padding: 10px 20px;
     border: none;
     background: #6a0dad;
-    color: #fff;
+    color: #ffffff;
+    font-size: 15px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.4s ease, transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .copy-btn:hover {
     background: #4b0082;
-    transform: scale(1.05);
-}
-
-/* DESCRIPTION */
-.description {
-    flex: 1;
-    color: #b5b5b5;
-    line-height: 1.6;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(107,0,168,0.6);
 }
 
 /* TOAST */
@@ -145,8 +155,9 @@ body {
     color: #fff;
     padding: 10px 20px;
     border-radius: 6px;
+    z-index: 9999;
     opacity: 0;
-    transition: 0.3s;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 .toast.show {
     opacity: 1;
@@ -154,31 +165,31 @@ body {
 }
 
 /* MOBILE */
-@media (max-width: 768px) {
-    .server-row {
+@media(max-width:768px){
+    .server-row{
         flex-direction: column;
+        align-items: flex-start;
     }
-    .link-section {
-        width: 100%;
+    .link-section{
+        width:100%;
     }
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
     <p class="title">Fyre Fusion Discord</p>
     <p class="subtitle">Join our communities and connect with like-minded people!</p>
 
-    <input id="searchBar" placeholder="Search servers...">
+    <input type="text" id="searchBar" placeholder="Search servers...">
 
     <!-- Glade -->
     <div class="server-row">
         <div class="link-section">
             <p class="link-title">Glade by Chill Hub</p>
             <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
-            <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
         </div>
         <div class="description">
             A community for room booking, organized channels, and a friendly staff.
@@ -190,7 +201,7 @@ body {
         <div class="link-section">
             <p class="link-title">Chill Hub Server</p>
             <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
-            <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
         </div>
         <div class="description">
             Hangout, chill, and chat with an active community.
@@ -202,13 +213,10 @@ body {
         <div class="link-section">
             <p class="link-title">J4J Roblox Paradise</p>
             <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
-            <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
         </div>
         <div class="description">
-            Welcome to Roblox Paradise! 🌴 Your ultimate Roblox hub packed with games, rewards,
-            events, and a friendly community! Includes Grow a Garden, Steal a Brainrot,
-            Plants vs Brainrots, Blox Fruits deals, The Forge discounts, invite rewards
-            (Robux + game rewards), activity rewards, frequent giveaways, and nonstop fun!
+            Welcome to Roblox Paradise! 🌴 Your ultimate Roblox hub packed with games, rewards, events, and a friendly community! 🎮 Games & Features Included: 🌱 Grow a Garden, 🧠 Steal a Brainrot, 🪴 Plants vs Brainrots, 🍍 Blox Fruits deals, ⚒️ The Forge, 💸 Invite Rewards, 🔥 Activity Rewards, 🎉 Giveaways, 💬 Fun community!
         </div>
     </div>
 
@@ -217,11 +225,10 @@ body {
         <div class="link-section">
             <p class="link-title">Abyss Server</p>
             <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
-            <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
         </div>
         <div class="description">
-            A place to talk, hang out, and play a fishing game using Bob the bot 🎣
-            Bob is the GOAT, and the community and staff are just as great.
+            Abyss is a Discord server where you can talk, hang out, and play a fishing game using Bob the bot 🎣 Bob is the GOAT, and the members and staff are amazing.
         </div>
     </div>
 
@@ -230,24 +237,22 @@ body {
         <div class="link-section">
             <p class="link-title">Pixelated Greenville Roleplay</p>
             <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
-            <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
         </div>
         <div class="description">
-            Chill Roblox hangout with Greenville RP, events, giveaways, daily vibes,
-            and a friendly community.
+            Chill Roblox hangout with Greenville RP, events, giveaways, daily vibes, and a friendly community.
         </div>
     </div>
 
-    <!-- Eclipse -->
+    <!-- Eclipse Trading Server -->
     <div class="server-row">
         <div class="link-section">
             <p class="link-title">Eclipse Trading Server</p>
             <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
-            <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite6')">Copy Link</button>
         </div>
         <div class="description">
-            A dedicated trading server to safely trade, negotiate deals,
-            and connect with experienced traders.
+            A dedicated trading server to safely trade, negotiate deals, and connect with experienced traders.
         </div>
     </div>
 
@@ -256,46 +261,57 @@ body {
         <div class="link-section">
             <p class="link-title">Owners Hub | Elite GSP</p>
             <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
-            <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
+            <button class="copy-btn" onclick="copyLink('invite7')">Copy Link</button>
         </div>
         <div class="description">
-            Insane invite rewards for Plants VS Brainrots, Steal A Brainrot,
-            Grow A Garden, frequent giveaways, and a custom bot with fun activities
-            and amazing rewards.
+            This server has insane invite rewards for many games such as Plants VS Brainrots, Steal A Brainrot, and Grow A Garden! Frequent giveaways and a custom bot offer fun activities and amazing rewards.
         </div>
     </div>
 </div>
 
 <script>
 function copyLink(id){
-    navigator.clipboard.writeText(document.getElementById(id).innerText);
-    // Optional: Toast notification
-    const toast=document.createElement('div');
-    toast.className='toast';
-    toast.innerText='Link copied!';
-    document.body.appendChild(toast);
-    requestAnimationFrame(()=>toast.classList.add('show'));
-    setTimeout(()=>{toast.classList.remove('show'); setTimeout(()=>toast.remove(),300);},2000);
+    const text=document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+        const toast=document.createElement('div');
+        toast.className='toast';
+        toast.innerText='Link copied!';
+        document.body.appendChild(toast);
+        requestAnimationFrame(()=>toast.classList.add('show'));
+        setTimeout(()=>{toast.classList.remove('show'); setTimeout(()=>toast.remove(),300);},2000);
+    });
 }
 
 // Scroll animation
 const rows=document.querySelectorAll('.server-row');
 const observer=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-        if(e.isIntersecting) e.target.classList.add('show');
-    });
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); });
 },{threshold:0.2});
-rows.forEach(r=>observer.observe(r));
+rows.forEach(row=>observer.observe(row));
 
 // Search filter
 const searchBar=document.getElementById('searchBar');
 searchBar.addEventListener('input',()=>{
-    const v=searchBar.value.toLowerCase();
-    rows.forEach(r=>{
-        r.style.display=r.querySelector('.link-title').innerText.toLowerCase().includes(v)?'flex':'none';
+    const term=searchBar.value.toLowerCase();
+    rows.forEach(row=>{
+        row.style.display=row.querySelector('.link-title').innerText.toLowerCase().includes(term)?'flex':'none';
     });
 });
-</script>
 
+// Optional: 3D card tilt
+document.querySelectorAll('.link-section').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+        const rect=card.getBoundingClientRect();
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
+        const centerX=rect.width/2;
+        const centerY=rect.height/2;
+        const rotateX=((y-centerY)/centerY)*6;
+        const rotateY=((x-centerX)/centerX)*6;
+        card.style.transform=`translateY(-12px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='translateY(0px) rotateX(0deg) rotateY(0deg)';});
+});
+</script>
 </body>
 </html>
