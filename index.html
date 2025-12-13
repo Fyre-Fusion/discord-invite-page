@@ -7,7 +7,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* === GLOBAL === */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -15,7 +14,7 @@ body {
     background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
     background-size: 400% 400%;
     animation: gradientBG 20s ease infinite;
-    color: #fff;
+    color: #ffffff;
 }
 
 @keyframes gradientBG {
@@ -32,8 +31,8 @@ body {
 
 .title {
     font-size: 42px;
-    text-align: center;
     font-weight: bold;
+    text-align: center;
 }
 
 .subtitle {
@@ -42,7 +41,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* SEARCH */
 #searchBar {
     width: 100%;
     padding: 12px;
@@ -52,15 +50,15 @@ body {
     font-size: 16px;
 }
 
-/* ROW — FIX IS HERE */
+/* ROW — REAL FIX */
 .server-row {
     display: flex;
-    align-items: flex-start; /* ✅ CRITICAL */
+    align-items: flex-start;
     gap: 20px;
     margin-bottom: 40px;
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: 0.6s ease;
 }
 
 .server-row.show {
@@ -75,14 +73,14 @@ body {
     padding: 25px;
     border-radius: 12px;
     position: relative;
+    flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     transition: background 0.3s ease, box-shadow 0.3s ease;
-    flex-shrink: 0;
 }
 
 /* GRADIENT OUTLINE */
 .link-section::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: -3px;
     border-radius: 15px;
@@ -97,7 +95,6 @@ body {
     100% {background-position: 0% 50%;}
 }
 
-/* NATURAL HOVER */
 .link-section:hover {
     background: #2b1f3d;
     box-shadow: 0 6px 20px rgba(107,0,168,0.6);
@@ -111,7 +108,6 @@ body {
 }
 
 .inviteLink {
-    font-size: 16px;
     word-break: break-all;
     margin-bottom: 15px;
 }
@@ -121,24 +117,20 @@ body {
     padding: 10px 20px;
     border: none;
     background: #6a0dad;
-    color: #ffffff;
-    font-size: 15px;
+    color: #fff;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .copy-btn:hover {
     background: #4b0082;
-    transform: scale(1.05);
 }
 
-/* DESCRIPTION (RIGHT SIDE) */
+/* DESCRIPTION */
 .description {
-    color: #b5b5b5;
-    font-size: 16px;
-    line-height: 1.6;
     flex: 1;
+    color: #b5b5b5;
+    line-height: 1.6;
 }
 
 /* TOAST */
@@ -152,9 +144,8 @@ body {
     padding: 10px 20px;
     border-radius: 6px;
     opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: 0.3s;
 }
-
 .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -178,14 +169,14 @@ body {
     <p class="title">Fyre Fusion Discord</p>
     <p class="subtitle">Join our communities and connect with like-minded people!</p>
 
-    <input type="text" id="searchBar" placeholder="Search servers...">
+    <input id="searchBar" placeholder="Search servers...">
 
     <!-- Glade -->
     <div class="server-row">
         <div class="link-section">
             <p class="link-title">Glade by Chill Hub</p>
             <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
-            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
         </div>
         <div class="description">
             A community for room booking, organized channels, and a friendly staff.
@@ -197,23 +188,25 @@ body {
         <div class="link-section">
             <p class="link-title">Chill Hub Server</p>
             <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
-            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
         </div>
         <div class="description">
             Hangout, chill, and chat with an active community.
         </div>
     </div>
 
-    <!-- J4J -->
+    <!-- J4J FULL -->
     <div class="server-row">
         <div class="link-section">
             <p class="link-title">J4J Roblox Paradise</p>
             <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
-            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
         </div>
         <div class="description">
-            Welcome to Roblox Paradise! 🌴 Packed with games, rewards, invite bonuses,
-            activity perks, giveaways, and a friendly community.
+            Welcome to Roblox Paradise! 🌴 Your ultimate Roblox hub packed with games, rewards,
+            events, and a friendly community! Includes Grow a Garden, Steal a Brainrot,
+            Plants vs Brainrots, Blox Fruits deals, The Forge discounts, invite rewards
+            (Robux + game rewards), activity rewards, frequent giveaways, and nonstop fun!
         </div>
     </div>
 
@@ -222,11 +215,11 @@ body {
         <div class="link-section">
             <p class="link-title">Abyss Server</p>
             <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
-            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
         </div>
         <div class="description">
-            Talk, hang out, and play a fishing game with Bob the bot 🎣 Legendary vibes
-            with great members and staff.
+            A place to talk, hang out, and play a fishing game using Bob the bot 🎣
+            Bob is the GOAT, and the community and staff are just as great.
         </div>
     </div>
 
@@ -235,10 +228,11 @@ body {
         <div class="link-section">
             <p class="link-title">Pixelated Greenville Roleplay</p>
             <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
-            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
         </div>
         <div class="description">
-            Chill Roblox hangout with RP, events, giveaways, and daily vibes.
+            Chill Roblox hangout with Greenville RP, events, giveaways, daily vibes,
+            and a friendly community.
         </div>
     </div>
 
@@ -247,10 +241,11 @@ body {
         <div class="link-section">
             <p class="link-title">Eclipse Trading Server</p>
             <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
-            <button class="copy-btn" onclick="copyLink('invite6')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
         </div>
         <div class="description">
-            Safe trading, deal negotiations, and an active trading-focused community.
+            A dedicated trading server to safely trade, negotiate deals,
+            and connect with experienced traders.
         </div>
     </div>
 
@@ -259,65 +254,34 @@ body {
         <div class="link-section">
             <p class="link-title">Owners Hub | Elite GSP</p>
             <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
-            <button class="copy-btn" onclick="copyLink('invite7')">Copy Link</button>
+            <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
         </div>
         <div class="description">
-            Insane invite rewards, frequent giveaways, and a custom bot with fun
-            activities and amazing rewards.
+            Insane invite rewards for Plants VS Brainrots, Steal A Brainrot,
+            Grow A Garden, frequent giveaways, and a custom bot with fun activities
+            and amazing rewards.
         </div>
     </div>
-
 </div>
 
 <script>
-/* COPY */
 function copyLink(id){
     navigator.clipboard.writeText(document.getElementById(id).innerText);
-    showToast("Link copied!");
 }
 
-/* TOAST */
-function showToast(message){
-    const toast=document.createElement('div');
-    toast.className='toast';
-    toast.innerText=message;
-    document.body.appendChild(toast);
-    requestAnimationFrame(()=>toast.classList.add('show'));
-    setTimeout(()=>{
-        toast.classList.remove('show');
-        setTimeout(()=>toast.remove(),300);
-    },2000);
-}
-
-/* SCROLL ANIMATION */
 const rows=document.querySelectorAll('.server-row');
 const observer=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
         if(e.isIntersecting) e.target.classList.add('show');
     });
 },{threshold:0.2});
-rows.forEach(row=>observer.observe(row));
+rows.forEach(r=>observer.observe(r));
 
-/* SEARCH */
-const searchBar=document.getElementById('searchBar');
 searchBar.addEventListener('input',()=>{
-    const term=searchBar.value.toLowerCase();
-    rows.forEach(row=>{
-        const title=row.querySelector('.link-title').innerText.toLowerCase();
-        row.style.display=title.includes(term)?'flex':'none';
-    });
-});
-
-/* TILT — VISUAL ONLY */
-document.querySelectorAll('.link-section').forEach(card=>{
-    card.addEventListener('mousemove',e=>{
-        const rect=card.getBoundingClientRect();
-        const x=(e.clientX-rect.left)/rect.width-0.5;
-        const y=(e.clientY-rect.top)/rect.height-0.5;
-        card.style.transform=`rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-6px)`;
-    });
-    card.addEventListener('mouseleave',()=>{
-        card.style.transform='none';
+    const v=searchBar.value.toLowerCase();
+    rows.forEach(r=>{
+        r.style.display=r.querySelector('.link-title').innerText.toLowerCase().includes(v)
+            ?'flex':'none';
     });
 });
 </script>
