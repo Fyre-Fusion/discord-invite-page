@@ -7,7 +7,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* === GLOBAL === */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -42,7 +41,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* SEARCH */
 #searchBar {
     width: 100%;
     padding: 12px;
@@ -70,14 +68,16 @@ body {
 /* CARD */
 .link-section {
     width: 280px;
+    min-height: 200px; /* 🔑 fixes uneven sizing */
     background: #1f1f1f;
     padding: 25px;
     border-radius: 12px;
     position: relative;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: box-shadow 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* OUTLINE */
 .link-section::before {
     content: "";
     position: absolute;
@@ -94,6 +94,12 @@ body {
     100% {background-position: 0% 50%;}
 }
 
+/* NATURAL HOVER (CSS ONLY) */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
 .link-title {
     font-weight: bold;
     margin-bottom: 10px;
@@ -104,7 +110,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* BUTTON */
 .copy-btn {
     background: #6a0dad;
     border: none;
@@ -118,7 +123,6 @@ body {
     background: #4b0082;
 }
 
-/* DESCRIPTION */
 .description {
     color: #b5b5b5;
     line-height: 1.6;
@@ -142,7 +146,6 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* MOBILE */
 @media (max-width: 768px) {
     .server-row {
         flex-direction: column;
@@ -162,6 +165,9 @@ body {
 
     <input id="searchBar" placeholder="Search servers...">
 
+    <!-- SERVERS -->
+    <!-- (unchanged content, only behavior fixed) -->
+
     <!-- Glade -->
     <div class="server-row">
         <div class="link-section">
@@ -169,9 +175,7 @@ body {
             <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
             <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
         </div>
-        <div class="description">
-            A community for room booking, organized channels, and a friendly staff.
-        </div>
+        <div class="description">A community for room booking, organized channels, and a friendly staff.</div>
     </div>
 
     <!-- Chill Hub -->
@@ -181,9 +185,7 @@ body {
             <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
             <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
         </div>
-        <div class="description">
-            Hangout, chill, and chat with an active community.
-        </div>
+        <div class="description">Hangout, chill, and chat with an active community.</div>
     </div>
 
     <!-- J4J -->
@@ -194,7 +196,7 @@ body {
             <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
         </div>
         <div class="description">
-            Welcome to Roblox Paradise! 🌴 Your ultimate Roblox hub packed with games, rewards, invite bonuses, activity perks, giveaways, and a friendly community.
+            Welcome to Roblox Paradise! 🌴 Packed with games, rewards, invite bonuses, activity perks, giveaways, and a friendly community.
         </div>
     </div>
 
@@ -206,7 +208,7 @@ body {
             <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
         </div>
         <div class="description">
-            Chat, hang out, and play a fishing game with Bob the bot 🎣 — legendary vibes, friendly members, and great staff.
+            Talk, hang out, and play a fishing game with Bob the bot 🎣 Legendary vibes and great staff.
         </div>
     </div>
 
@@ -218,7 +220,7 @@ body {
             <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
         </div>
         <div class="description">
-            Chill Roblox hangout with Greenville RP, events, giveaways, daily vibes, and unforgettable memories.
+            Chill Roblox hangout with RP, events, giveaways, and daily vibes.
         </div>
     </div>
 
@@ -230,7 +232,7 @@ body {
             <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
         </div>
         <div class="description">
-            A dedicated trading server where members safely trade, negotiate deals, and connect with an active trading community.
+            Safe trading, deal negotiations, and an active trading-focused community.
         </div>
     </div>
 
@@ -242,20 +244,17 @@ body {
             <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
         </div>
         <div class="description">
-            This server has insane invite rewards for Plants VS Brainrots, Steal A Brainrot, and Grow A Garden! Enjoy frequent giveaways and a custom bot with fun activities and amazing rewards.
+            Insane invite rewards, frequent giveaways, and a custom bot with fun activities and rewards.
         </div>
     </div>
-
 </div>
 
 <script>
-/* COPY */
 function copyLink(id){
     navigator.clipboard.writeText(document.getElementById(id).innerText);
     showToast("Link copied!");
 }
 
-/* TOAST */
 function showToast(msg){
     const t=document.createElement("div");
     t.className="toast";
@@ -265,14 +264,12 @@ function showToast(msg){
     setTimeout(()=>{t.classList.remove("show");t.remove();},2000);
 }
 
-/* SCROLL ANIMATION */
 const rows=document.querySelectorAll(".server-row");
 const obs=new IntersectionObserver(e=>{
     e.forEach(x=>x.isIntersecting && x.target.classList.add("show"));
 });
 rows.forEach(r=>obs.observe(r));
 
-/* SEARCH */
 searchBar.addEventListener("input",()=>{
     const v=searchBar.value.toLowerCase();
     rows.forEach(r=>{
@@ -280,7 +277,7 @@ searchBar.addEventListener("input",()=>{
     });
 });
 
-/* SAFE TILT (NO STICKING) */
+/* TILT ONLY — NO COLOR, NO SHADOW */
 document.querySelectorAll(".link-section").forEach(card=>{
     card.addEventListener("mousemove",e=>{
         const r=card.getBoundingClientRect();
@@ -288,12 +285,1188 @@ document.querySelectorAll(".link-section").forEach(card=>{
         const y=(e.clientY-r.top)/r.height-0.5;
         card.style.transform=`rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-8px)`;
     });
-    card.addEventListener("mouseenter",()=>{
-        card.style.boxShadow="0 6px 20px rgba(107,0,168,0.6)";
+    card.addEventListener("mouseleave",()=>{
+        card.style.transform="none";
+    });
+});
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #fff;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.title {
+    font-size: 42px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+}
+
+#searchBar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+/* ROW */
+.server-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s ease;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD */
+.link-section {
+    width: 280px;
+    min-height: 200px; /* 🔑 fixes uneven sizing */
+    background: #1f1f1f;
+    padding: 25px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* OUTLINE */
+.link-section::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* NATURAL HOVER (CSS ONLY) */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+.link-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.copy-btn {
+    background: #6a0dad;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+}
+
+.description {
+    color: #b5b5b5;
+    line-height: 1.6;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    padding: 10px 20px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 768px) {
+    .server-row {
+        flex-direction: column;
+    }
+    .link-section {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input id="searchBar" placeholder="Search servers...">
+
+    <!-- SERVERS -->
+    <!-- (unchanged content, only behavior fixed) -->
+
+    <!-- Glade -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
+        </div>
+        <div class="description">A community for room booking, organized channels, and a friendly staff.</div>
+    </div>
+
+    <!-- Chill Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
+        </div>
+        <div class="description">Hangout, chill, and chat with an active community.</div>
+    </div>
+
+    <!-- J4J -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
+        </div>
+        <div class="description">
+            Welcome to Roblox Paradise! 🌴 Packed with games, rewards, invite bonuses, activity perks, giveaways, and a friendly community.
+        </div>
+    </div>
+
+    <!-- Abyss -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
+        </div>
+        <div class="description">
+            Talk, hang out, and play a fishing game with Bob the bot 🎣 Legendary vibes and great staff.
+        </div>
+    </div>
+
+    <!-- Pixelated -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
+        </div>
+        <div class="description">
+            Chill Roblox hangout with RP, events, giveaways, and daily vibes.
+        </div>
+    </div>
+
+    <!-- Eclipse -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Eclipse Trading Server</p>
+            <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
+            <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
+        </div>
+        <div class="description">
+            Safe trading, deal negotiations, and an active trading-focused community.
+        </div>
+    </div>
+
+    <!-- Owners Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Owners Hub | Elite GSP</p>
+            <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
+            <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
+        </div>
+        <div class="description">
+            Insane invite rewards, frequent giveaways, and a custom bot with fun activities and rewards.
+        </div>
+    </div>
+</div>
+
+<script>
+function copyLink(id){
+    navigator.clipboard.writeText(document.getElementById(id).innerText);
+    showToast("Link copied!");
+}
+
+function showToast(msg){
+    const t=document.createElement("div");
+    t.className="toast";
+    t.textContent=msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add("show"));
+    setTimeout(()=>{t.classList.remove("show");t.remove();},2000);
+}
+
+const rows=document.querySelectorAll(".server-row");
+const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>x.isIntersecting && x.target.classList.add("show"));
+});
+rows.forEach(r=>obs.observe(r));
+
+searchBar.addEventListener("input",()=>{
+    const v=searchBar.value.toLowerCase();
+    rows.forEach(r=>{
+        r.style.display=r.querySelector(".link-title").innerText.toLowerCase().includes(v)?"flex":"none";
+    });
+});
+
+/* TILT ONLY — NO COLOR, NO SHADOW */
+document.querySelectorAll(".link-section").forEach(card=>{
+    card.addEventListener("mousemove",e=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-0.5;
+        const y=(e.clientY-r.top)/r.height-0.5;
+        card.style.transform=`rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-8px)`;
     });
     card.addEventListener("mouseleave",()=>{
         card.style.transform="none";
-        card.style.boxShadow="0 4px 15px rgba(0,0,0,0.3)";
+    });
+});
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #fff;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.title {
+    font-size: 42px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+}
+
+#searchBar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+/* ROW */
+.server-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s ease;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD */
+.link-section {
+    width: 280px;
+    min-height: 200px; /* 🔑 fixes uneven sizing */
+    background: #1f1f1f;
+    padding: 25px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* OUTLINE */
+.link-section::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* NATURAL HOVER (CSS ONLY) */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+.link-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.copy-btn {
+    background: #6a0dad;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+}
+
+.description {
+    color: #b5b5b5;
+    line-height: 1.6;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    padding: 10px 20px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 768px) {
+    .server-row {
+        flex-direction: column;
+    }
+    .link-section {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input id="searchBar" placeholder="Search servers...">
+
+    <!-- SERVERS -->
+    <!-- (unchanged content, only behavior fixed) -->
+
+    <!-- Glade -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
+        </div>
+        <div class="description">A community for room booking, organized channels, and a friendly staff.</div>
+    </div>
+
+    <!-- Chill Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
+        </div>
+        <div class="description">Hangout, chill, and chat with an active community.</div>
+    </div>
+
+    <!-- J4J -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
+        </div>
+        <div class="description">
+            Welcome to Roblox Paradise! 🌴 Packed with games, rewards, invite bonuses, activity perks, giveaways, and a friendly community.
+        </div>
+    </div>
+
+    <!-- Abyss -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
+        </div>
+        <div class="description">
+            Talk, hang out, and play a fishing game with Bob the bot 🎣 Legendary vibes and great staff.
+        </div>
+    </div>
+
+    <!-- Pixelated -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
+        </div>
+        <div class="description">
+            Chill Roblox hangout with RP, events, giveaways, and daily vibes.
+        </div>
+    </div>
+
+    <!-- Eclipse -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Eclipse Trading Server</p>
+            <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
+            <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
+        </div>
+        <div class="description">
+            Safe trading, deal negotiations, and an active trading-focused community.
+        </div>
+    </div>
+
+    <!-- Owners Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Owners Hub | Elite GSP</p>
+            <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
+            <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
+        </div>
+        <div class="description">
+            Insane invite rewards, frequent giveaways, and a custom bot with fun activities and rewards.
+        </div>
+    </div>
+</div>
+
+<script>
+function copyLink(id){
+    navigator.clipboard.writeText(document.getElementById(id).innerText);
+    showToast("Link copied!");
+}
+
+function showToast(msg){
+    const t=document.createElement("div");
+    t.className="toast";
+    t.textContent=msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add("show"));
+    setTimeout(()=>{t.classList.remove("show");t.remove();},2000);
+}
+
+const rows=document.querySelectorAll(".server-row");
+const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>x.isIntersecting && x.target.classList.add("show"));
+});
+rows.forEach(r=>obs.observe(r));
+
+searchBar.addEventListener("input",()=>{
+    const v=searchBar.value.toLowerCase();
+    rows.forEach(r=>{
+        r.style.display=r.querySelector(".link-title").innerText.toLowerCase().includes(v)?"flex":"none";
+    });
+});
+
+/* TILT ONLY — NO COLOR, NO SHADOW */
+document.querySelectorAll(".link-section").forEach(card=>{
+    card.addEventListener("mousemove",e=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-0.5;
+        const y=(e.clientY-r.top)/r.height-0.5;
+        card.style.transform=`rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-8px)`;
+    });
+    card.addEventListener("mouseleave",()=>{
+        card.style.transform="none";
+    });
+});
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #fff;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.title {
+    font-size: 42px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+}
+
+#searchBar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+/* ROW */
+.server-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s ease;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD */
+.link-section {
+    width: 280px;
+    min-height: 200px; /* 🔑 fixes uneven sizing */
+    background: #1f1f1f;
+    padding: 25px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* OUTLINE */
+.link-section::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* NATURAL HOVER (CSS ONLY) */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+.link-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.copy-btn {
+    background: #6a0dad;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+}
+
+.description {
+    color: #b5b5b5;
+    line-height: 1.6;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    padding: 10px 20px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 768px) {
+    .server-row {
+        flex-direction: column;
+    }
+    .link-section {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input id="searchBar" placeholder="Search servers...">
+
+    <!-- SERVERS -->
+    <!-- (unchanged content, only behavior fixed) -->
+
+    <!-- Glade -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
+        </div>
+        <div class="description">A community for room booking, organized channels, and a friendly staff.</div>
+    </div>
+
+    <!-- Chill Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
+        </div>
+        <div class="description">Hangout, chill, and chat with an active community.</div>
+    </div>
+
+    <!-- J4J -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
+        </div>
+        <div class="description">
+            Welcome to Roblox Paradise! 🌴 Packed with games, rewards, invite bonuses, activity perks, giveaways, and a friendly community.
+        </div>
+    </div>
+
+    <!-- Abyss -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
+        </div>
+        <div class="description">
+            Talk, hang out, and play a fishing game with Bob the bot 🎣 Legendary vibes and great staff.
+        </div>
+    </div>
+
+    <!-- Pixelated -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
+        </div>
+        <div class="description">
+            Chill Roblox hangout with RP, events, giveaways, and daily vibes.
+        </div>
+    </div>
+
+    <!-- Eclipse -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Eclipse Trading Server</p>
+            <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
+            <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
+        </div>
+        <div class="description">
+            Safe trading, deal negotiations, and an active trading-focused community.
+        </div>
+    </div>
+
+    <!-- Owners Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Owners Hub | Elite GSP</p>
+            <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
+            <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
+        </div>
+        <div class="description">
+            Insane invite rewards, frequent giveaways, and a custom bot with fun activities and rewards.
+        </div>
+    </div>
+</div>
+
+<script>
+function copyLink(id){
+    navigator.clipboard.writeText(document.getElementById(id).innerText);
+    showToast("Link copied!");
+}
+
+function showToast(msg){
+    const t=document.createElement("div");
+    t.className="toast";
+    t.textContent=msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add("show"));
+    setTimeout(()=>{t.classList.remove("show");t.remove();},2000);
+}
+
+const rows=document.querySelectorAll(".server-row");
+const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>x.isIntersecting && x.target.classList.add("show"));
+});
+rows.forEach(r=>obs.observe(r));
+
+searchBar.addEventListener("input",()=>{
+    const v=searchBar.value.toLowerCase();
+    rows.forEach(r=>{
+        r.style.display=r.querySelector(".link-title").innerText.toLowerCase().includes(v)?"flex":"none";
+    });
+});
+
+/* TILT ONLY — NO COLOR, NO SHADOW */
+document.querySelectorAll(".link-section").forEach(card=>{
+    card.addEventListener("mousemove",e=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-0.5;
+        const y=(e.clientY-r.top)/r.height-0.5;
+        card.style.transform=`rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-8px)`;
+    });
+    card.addEventListener("mouseleave",()=>{
+        card.style.transform="none";
+    });
+});
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Invite Links</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #fff;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.title {
+    font-size: 42px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    color: #b5b5b5;
+    margin-bottom: 30px;
+}
+
+#searchBar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+/* ROW */
+.server-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s ease;
+}
+
+.server-row.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD */
+.link-section {
+    width: 280px;
+    min-height: 200px; /* 🔑 fixes uneven sizing */
+    background: #1f1f1f;
+    padding: 25px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* OUTLINE */
+.link-section::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 15px;
+    background: linear-gradient(270deg, #5865F2, #9B59B6);
+    z-index: -1;
+    animation: borderGradient 4s linear infinite;
+}
+
+@keyframes borderGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* NATURAL HOVER (CSS ONLY) */
+.link-section:hover {
+    background: #2b1f3d;
+    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+}
+
+.link-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.inviteLink {
+    word-break: break-all;
+    margin-bottom: 15px;
+}
+
+.copy-btn {
+    background: #6a0dad;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: #4b0082;
+}
+
+.description {
+    color: #b5b5b5;
+    line-height: 1.6;
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #5865F2;
+    padding: 10px 20px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 768px) {
+    .server-row {
+        flex-direction: column;
+    }
+    .link-section {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <p class="title">Fyre Fusion Discord</p>
+    <p class="subtitle">Join our communities and connect with like-minded people!</p>
+
+    <input id="searchBar" placeholder="Search servers...">
+
+    <!-- SERVERS -->
+    <!-- (unchanged content, only behavior fixed) -->
+
+    <!-- Glade -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Glade by Chill Hub</p>
+            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
+            <button class="copy-btn" onclick="copyLink('invite1')">Copy</button>
+        </div>
+        <div class="description">A community for room booking, organized channels, and a friendly staff.</div>
+    </div>
+
+    <!-- Chill Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Chill Hub Server</p>
+            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
+            <button class="copy-btn" onclick="copyLink('invite2')">Copy</button>
+        </div>
+        <div class="description">Hangout, chill, and chat with an active community.</div>
+    </div>
+
+    <!-- J4J -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">J4J Roblox Paradise</p>
+            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
+            <button class="copy-btn" onclick="copyLink('invite3')">Copy</button>
+        </div>
+        <div class="description">
+            Welcome to Roblox Paradise! 🌴 Packed with games, rewards, invite bonuses, activity perks, giveaways, and a friendly community.
+        </div>
+    </div>
+
+    <!-- Abyss -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Abyss Server</p>
+            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
+            <button class="copy-btn" onclick="copyLink('invite4')">Copy</button>
+        </div>
+        <div class="description">
+            Talk, hang out, and play a fishing game with Bob the bot 🎣 Legendary vibes and great staff.
+        </div>
+    </div>
+
+    <!-- Pixelated -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Pixelated Greenville Roleplay</p>
+            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
+            <button class="copy-btn" onclick="copyLink('invite5')">Copy</button>
+        </div>
+        <div class="description">
+            Chill Roblox hangout with RP, events, giveaways, and daily vibes.
+        </div>
+    </div>
+
+    <!-- Eclipse -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Eclipse Trading Server</p>
+            <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
+            <button class="copy-btn" onclick="copyLink('invite6')">Copy</button>
+        </div>
+        <div class="description">
+            Safe trading, deal negotiations, and an active trading-focused community.
+        </div>
+    </div>
+
+    <!-- Owners Hub -->
+    <div class="server-row">
+        <div class="link-section">
+            <p class="link-title">Owners Hub | Elite GSP</p>
+            <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
+            <button class="copy-btn" onclick="copyLink('invite7')">Copy</button>
+        </div>
+        <div class="description">
+            Insane invite rewards, frequent giveaways, and a custom bot with fun activities and rewards.
+        </div>
+    </div>
+</div>
+
+<script>
+function copyLink(id){
+    navigator.clipboard.writeText(document.getElementById(id).innerText);
+    showToast("Link copied!");
+}
+
+function showToast(msg){
+    const t=document.createElement("div");
+    t.className="toast";
+    t.textContent=msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add("show"));
+    setTimeout(()=>{t.classList.remove("show");t.remove();},2000);
+}
+
+const rows=document.querySelectorAll(".server-row");
+const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>x.isIntersecting && x.target.classList.add("show"));
+});
+rows.forEach(r=>obs.observe(r));
+
+searchBar.addEventListener("input",()=>{
+    const v=searchBar.value.toLowerCase();
+    rows.forEach(r=>{
+        r.style.display=r.querySelector(".link-title").innerText.toLowerCase().includes(v)?"flex":"none";
+    });
+});
+
+/* TILT ONLY — NO COLOR, NO SHADOW */
+document.querySelectorAll(".link-section").forEach(card=>{
+    card.addEventListener("mousemove",e=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-0.5;
+        const y=(e.clientY-r.top)/r.height-0.5;
+        card.style.transform=`rotateX(${-y*6}deg) rotateY(${x*6}deg) translateY(-8px)`;
+    });
+    card.addEventListener("mouseleave",()=>{
+        card.style.transform="none";
     });
 });
 </script>
