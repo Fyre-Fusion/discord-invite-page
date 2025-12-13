@@ -2,267 +2,212 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Discord Invite Links</title>
+<title>Server Finder</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-/* ================= GLOBAL ================= */
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: linear-gradient(-45deg, #000000, #0a0f20, #000000, #0a0f20);
-    background-size: 400% 400%;
-    animation: gradientBG 20s ease infinite;
-    color: #ffffff;
+:root{
+    --bg:#0b0f1a;
+    --accent:#5865F2;
+    --accent2:#9b59ff;
 }
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, #1b1f3a, transparent 40%),
+        radial-gradient(circle at 80% 80%, #1b1f3a, transparent 40%),
+        var(--bg);
+    color:#fff;
+    overflow-x:hidden;
 }
 
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 60px 20px;
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:80px 20px;
 }
 
-.title {
-    font-size: 42px;
-    font-weight: bold;
-    text-align: center;
+h1{
+    text-align:center;
+    font-size:52px;
+    margin-bottom:10px;
+    animation:pulse 3s ease-in-out infinite;
 }
 
-.subtitle {
-    text-align: center;
-    color: #b5b5b5;
-    margin-bottom: 30px;
+@keyframes pulse{
+    0%,100%{transform:scale(1); text-shadow:0 0 15px rgba(88,101,242,.4);}
+    50%{transform:scale(1.04); text-shadow:0 0 30px rgba(155,89,255,.8);}
 }
 
-/* ================= SEARCH ================= */
-#searchBar {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    margin-bottom: 40px;
-    font-size: 16px;
+#search{
+    width:100%;
+    max-width:500px;
+    margin:20px auto 60px;
+    display:block;
+    padding:14px 18px;
+    border-radius:12px;
+    border:none;
+    outline:none;
+    font-size:16px;
+    background:#11152b;
+    color:#fff;
 }
 
-/* ================= SERVER ROW ================= */
-.server-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 40px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+.server{
+    display:flex;
+    gap:30px;
+    margin-bottom:60px;
+    opacity:0;
+    transform:translateY(40px);
+    transition:all .8s ease;
+    perspective:1200px;
+}
+.server.show{opacity:1;transform:none}
+
+.card{
+    width:300px;
+    background:linear-gradient(145deg,#1b2140,#11152b);
+    border-radius:18px;
+    padding:25px;
+    position:relative;
+    transform-style:preserve-3d;
+    box-shadow:0 30px 60px rgba(0,0,0,.4);
+    will-change:transform;
 }
 
-.server-row.show {
-    opacity: 1;
-    transform: translateY(0);
+.card::before{
+    content:'';
+    position:absolute;
+    inset:-2px;
+    border-radius:20px;
+    background:linear-gradient(120deg,var(--accent),var(--accent2));
+    z-index:-1;
 }
 
-/* ================= CARD ================= */
-.link-section {
-    width: 280px;
-    background: #1f1f1f;
-    padding: 25px;
-    border-radius: 12px;
-    position: relative;
-    flex-shrink: 0;
-    cursor: pointer;
+.card *{transform:translateZ(30px)}
 
-    /* IMPORTANT */
-    will-change: transform;
+.card h3{margin:0 0 10px;font-size:20px}
+.card p{font-size:14px;color:#cbd1ff;word-break:break-all}
 
-    /* Separate transitions */
-    transition:
-        background-color 0.45s ease,
-        box-shadow 0.45s ease,
-        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    border: 3px solid transparent;
-    background-clip: padding-box;
+.card button{
+    margin-top:15px;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:var(--accent);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
 }
 
-/* ================= GRADIENT BORDER ================= */
-.link-section::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 15px;
-    background: linear-gradient(270deg, #5865F2, #9B59B6);
-    z-index: -1;
-    animation: borderGradient 4s linear infinite;
+.desc{
+    flex:1;
+    color:#bbb;
+    line-height:1.7;
 }
 
-@keyframes borderGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+.glow{
+    position:absolute;
+    inset:0;
+    border-radius:18px;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .3s;
 }
 
-/* ================= COLOR HOVER ONLY ================= */
-.link-section:hover {
-    background-color: #2b1f3d;
-    box-shadow: 0 6px 20px rgba(107,0,168,0.6);
+@media(max-width:800px){
+    .server{flex-direction:column}
+    .card{width:100%}
 }
 
-/* ================= CONTENT ================= */
-.link-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.inviteLink {
-    word-break: break-all;
-    margin-bottom: 15px;
-}
-
-.description {
-    flex: 1;
-    color: #b5b5b5;
-    line-height: 1.6;
-}
-
-/* ================= BUTTON ================= */
-.copy-btn {
-    padding: 10px 20px;
-    border: none;
-    background: #6a0dad;
-    color: #ffffff;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.copy-btn:hover {
-    background: #4b0082;
-    transform: scale(1.08);
-}
-
-/* ================= CONFETTI ================= */
-#confetti-canvas {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-    .server-row {
-        flex-direction: column;
-    }
-
-    .link-section {
-        width: 100%;
-    }
+canvas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:999;
 }
 </style>
 </head>
-
 <body>
 
-<canvas id="confetti-canvas"></canvas>
+<canvas id="confetti"></canvas>
 
 <div class="container">
+    <h1>Server Finder</h1>
+    <p style="text-align:center; font-size:20px; color:#bbb;">
+        Total Servers: <span id="serverCount">0</span>
+    </p>
+    <input id="search" placeholder="Search servers...">
 
-    <p class="title">Fyre Fusion Discord</p>
-    <p class="subtitle">Join our communities and connect with like-minded people!</p>
-
-    <input type="text" id="searchBar" placeholder="Search servers...">
-
-    <!-- Glade -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">Glade by Chill Hub</p>
-            <p class="inviteLink" id="invite1">https://discord.gg/8aPtykpU</p>
-            <button class="copy-btn" onclick="copyLink('invite1')">Copy Link</button>
+    <!-- SERVERS -->
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>Glade by Chill Hub</h3>
+            <p>https://discord.gg/8aPtykpU</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
-            A community for room booking, organized channels, and a friendly staff.
-        </div>
+        <div class="desc">A calm, organized Discord focused on chill vibes.</div>
     </div>
 
-    <!-- Chill Hub -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">Chill Hub Server</p>
-            <p class="inviteLink" id="invite2">https://discord.gg/VjK2BKpT</p>
-            <button class="copy-btn" onclick="copyLink('invite2')">Copy Link</button>
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>Chill Hub Server</h3>
+            <p>https://discord.gg/VjK2BKpT</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
-            Hangout, chill, and chat with an active community.
-        </div>
+        <div class="desc">Hang out and chat with an active community.</div>
     </div>
 
-    <!-- J4J -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">J4J Roblox Paradise</p>
-            <p class="inviteLink" id="invite3">https://discord.gg/QFCgnnSRXA</p>
-            <button class="copy-btn" onclick="copyLink('invite3')">Copy Link</button>
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>J4J Roblox Paradise</h3>
+            <p>https://discord.gg/QFCgnnSRXA</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
-            Welcome to Roblox Paradise! 🌴 Packed with games, invite rewards,
-            giveaways, activity perks, and a fun community.
-        </div>
+        <div class="desc">Roblox games, Robux rewards, events, giveaways.</div>
     </div>
 
-    <!-- Abyss -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">Abyss Server</p>
-            <p class="inviteLink" id="invite4">https://discord.gg/EUSUAnEU</p>
-            <button class="copy-btn" onclick="copyLink('invite4')">Copy Link</button>
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>Abyss Server</h3>
+            <p>https://discord.gg/EUSUAnEU</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
-            Talk, hang out, and fish with Bob the bot 🎣 Legendary vibes and great staff.
-        </div>
+        <div class="desc">Chat, chill, and fish with Bob 🎣</div>
     </div>
 
-    <!-- Pixelated -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">Pixelated Greenville Roleplay</p>
-            <p class="inviteLink" id="invite5">https://discord.gg/SdewTbCj78</p>
-            <button class="copy-btn" onclick="copyLink('invite5')">Copy Link</button>
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>Pixelated Greenville Roleplay</h3>
+            <p>https://discord.gg/SdewTbCj78</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
-            Greenville RP, events, giveaways, and chill Roblox vibes.
-        </div>
+        <div class="desc">Greenville RP, events, giveaways.</div>
     </div>
 
-    <!-- Eclipse -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">Eclipse Trading Server</p>
-            <p class="inviteLink" id="invite6">https://discord.gg/jY3D5jwVXq</p>
-            <button class="copy-btn" onclick="copyLink('invite6')">Copy Link</button>
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>Eclipse Trading Server</h3>
+            <p>https://discord.gg/jY3D5jwVXq</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
+        <div class="desc">
             Safe trading, deals, and an active trading-focused community.
         </div>
     </div>
 
-    <!-- Owners Hub -->
-    <div class="server-row">
-        <div class="link-section">
-            <p class="link-title">Owners Hub | Elite GSP</p>
-            <p class="inviteLink" id="invite7">https://discord.gg/zhx9ewQtw5</p>
-            <button class="copy-btn" onclick="copyLink('invite7')">Copy Link</button>
+    <div class="server">
+        <div class="card"><div class="glow"></div>
+            <h3>Owners Hub | Elite GSP</h3>
+            <p>https://discord.gg/zhx9ewQtw5</p>
+            <button onclick="copyLink(this)">Copy Link</button>
         </div>
-        <div class="description">
+        <div class="desc">
             Insane invite rewards, frequent giveaways, and a custom bot with fun activities.
         </div>
     </div>
@@ -270,95 +215,108 @@ body {
 </div>
 
 <script>
-/* ================= SCROLL ANIMATION ================= */
-const rows = document.querySelectorAll('.server-row');
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>x.isIntersecting&&x.target.classList.add('show'))
+},{threshold:.2})
+document.querySelectorAll('.server').forEach(s=>obs.observe(s))
 
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-        }
-    });
-}, { threshold: 0.2 });
+/* SEARCH FILTER */
+search.oninput=e=>{
+    const v=e.target.value.toLowerCase()
+    document.querySelectorAll('.server').forEach(s=>{
+        s.style.display=s.querySelector('h3').innerText.toLowerCase().includes(v)?'flex':'none'
+    })
+}
 
-rows.forEach(row => observer.observe(row));
+/* 3D LIQUID HOVER (UNCHANGED) */
+document.querySelectorAll('.card').forEach(card=>{
+    const glow=card.querySelector('.glow')
+    let cx=0,cy=0,tx=0,ty=0,time=0
 
-/* ================= SEARCH ================= */
-const searchBar = document.getElementById('searchBar');
+    function anim(){
+        time+=0.03
+        const wobbleX=Math.sin(time)*1.5
+        const wobbleY=Math.cos(time)*1.5
+        cx+=(tx-cx)*0.08
+        cy+=(ty-cy)*0.08
+        card.style.transform=`rotateX(${cy+wobbleY}deg) rotateY(${cx+wobbleX}deg)`
+        glow.style.background=`radial-gradient(circle at ${50+cx*3}% ${50-cy*3}%,rgba(88,101,242,.45),transparent 60%)`
+        requestAnimationFrame(anim)
+    }
+    anim()
 
-searchBar.addEventListener('input', () => {
-    const term = searchBar.value.toLowerCase();
+    card.onmousemove=e=>{
+        const r=card.getBoundingClientRect()
+        tx=((e.clientX-r.left)/r.width-.5)*18
+        ty=-((e.clientY-r.top)/r.height-.5)*18
+        glow.style.opacity=1
+    }
+    card.onmouseleave=()=>{
+        tx=ty=0
+        glow.style.opacity=0
+    }
+})
 
-    rows.forEach(row => {
-        const title = row.querySelector('.link-title').innerText.toLowerCase();
-        row.style.display = title.includes(term) ? 'flex' : 'none';
-    });
-});
+/* CONFETTI */
+const c=document.getElementById('confetti')
+const ctx=c.getContext('2d')
+c.width=innerWidth;c.height=innerHeight
+let pieces=[]
 
-/* ================= 3D WARP (CORRECT) ================= */
-document.querySelectorAll('.link-section').forEach(card => {
+function copyLink(btn){
+    navigator.clipboard.writeText(btn.previousElementSibling.innerText)
+    btn.innerText="Copied!"
+    setTimeout(()=>btn.innerText="Copy Link",1200)
+    fireConfetti()
+}
 
-    card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-        card.style.transform =
-            `translateY(-10px) rotateX(${-y * 10}deg) rotateY(${x * 10}deg)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.transform =
-            'translateY(0px) rotateX(0deg) rotateY(0deg)';
-    });
-
-});
-
-/* ================= CONFETTI ================= */
-const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
-
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-let confetti = [];
-
-function copyLink(id) {
-    navigator.clipboard.writeText(document.getElementById(id).innerText);
-
-    for (let i = 0; i < 100; i++) {
-        confetti.push({
-            x: canvas.width / 2,
-            y: 0,
-            size: Math.random() * 6 + 4,
-            dx: (Math.random() - 0.5) * 4,
-            dy: Math.random() * 3 + 2,
-            color: `hsl(${Math.random() * 360},100%,50%)`
-        });
+function fireConfetti(){
+    for(let i=0;i<120;i++){
+        pieces.push({
+            x:innerWidth/2,
+            y:innerHeight/3,
+            vx:(Math.random()-.5)*8,
+            vy:Math.random()*-6-3,
+            g:0.15,
+            r:Math.random()*6+4,
+            c:`hsl(${Math.random()*360},100%,60%)`
+        })
     }
 }
 
-function animateConfetti() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    confetti.forEach(p => {
-        p.x += p.dx;
-        p.y += p.dy;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-    });
-
-    confetti = confetti.filter(p => p.y < canvas.height);
-    requestAnimationFrame(animateConfetti);
+function confettiAnim(){
+    ctx.clearRect(0,0,c.width,c.height)
+    pieces.forEach(p=>{
+        p.vy+=p.g
+        p.x+=p.vx
+        p.y+=p.vy
+        ctx.fillStyle=p.c
+        ctx.fillRect(p.x,p.y,p.r,p.r)
+    })
+    pieces=pieces.filter(p=>p.y<c.height)
+    requestAnimationFrame(confettiAnim)
 }
+confettiAnim()
+onresize=()=>{c.width=innerWidth;c.height=innerHeight}
 
-animateConfetti();
+/* ANIMATED SERVER COUNTER */
+function animateServerCount() {
+    const countEl = document.getElementById('serverCount');
+    const total = document.querySelectorAll('.server').length;
+    let current = 0;
+    const step = Math.ceil(total / 50); // animation speed
 
-window.addEventListener('resize', () => {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-});
+    const interval = setInterval(() => {
+        current += step;
+        if (current >= total) {
+            current = total;
+            clearInterval(interval);
+        }
+        countEl.innerText = current;
+    }, 20);
+}
+window.addEventListener('load', animateServerCount);
 </script>
 
 </body>
